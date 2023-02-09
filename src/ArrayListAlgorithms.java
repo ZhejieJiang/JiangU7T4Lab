@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ArrayListAlgorithms {
     /**
@@ -298,17 +299,44 @@ public class ArrayListAlgorithms {
      *
      *  @param numList  numList of ints
      */
-        public static ArrayList<Integer> modes(int[] numList)
-        {
-        ArrayList<Integer> arrList = new ArrayList<Integer>();
-
-
-        for (int i = 0; i < numList.length; ++i) {
-            int count = 0;
-            for (int j = 0; j < numList.length; ++j) {
-                if (numList[j] == numList[i])
-                    ++count;
+    public static ArrayList<Integer> modes(int[] numList){
+        int maxModeCount = 2;
+        int modeCount;
+        for (int i = 0; i < numList.length; i++){
+            modeCount = 1;
+            for (int j = i+1; j < numList.length; j++){
+                if (numList[i] == numList[j]){
+                    modeCount++;
+                }
+            }
+            if (modeCount > maxModeCount){
+                maxModeCount = modeCount;
             }
         }
-        return arrList;
+
+        ArrayList<Integer> modes = new ArrayList<>();
+        for (int num: numList){
+            modeCount = 0;
+            for (int num2: numList){
+                if (num == num2){
+                    modeCount++;
+                }
+            }
+            if (modeCount == maxModeCount) {
+                modes.add(num);
+            }
+        }
+        for (int i = 0; i < modes.size(); i++){
+            for (int j = i+1; j < modes.size(); j++){
+                if (Objects.equals(modes.get(i), modes.get(j))){
+                    modes.remove(j);
+                    j--;
+                }
+            }
+        }
+        if ((double)numList.length/maxModeCount == modes.size()){
+            modes.clear();
+        }
+        return modes;
+    }
 }
